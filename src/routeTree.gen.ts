@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as AuthRouteImport } from './routes/auth'
+import { Route as AuthenticatedMesBiensRouteImport } from './routes/_authenticated/mes-biens'
 import { Route as AuthenticatedNouveauRouteImport } from './routes/_authenticated/nouveau'
 
 const IndexRoute = IndexRouteImport.update({
@@ -28,6 +29,11 @@ const AuthRoute = AuthRouteImport.update({
   path: '/auth',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedMesBiensRoute = AuthenticatedMesBiensRouteImport.update({
+  id: '/mes-biens',
+  path: '/mes-biens',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedNouveauRoute = AuthenticatedNouveauRouteImport.update({
   id: '/nouveau',
   path: '/nouveau',
@@ -37,11 +43,13 @@ const AuthenticatedNouveauRoute = AuthenticatedNouveauRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/mes-biens': typeof AuthenticatedMesBiensRoute
   '/nouveau': typeof AuthenticatedNouveauRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/mes-biens': typeof AuthenticatedMesBiensRoute
   '/nouveau': typeof AuthenticatedNouveauRoute
 }
 export interface FileRoutesById {
@@ -49,14 +57,21 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/auth': typeof AuthRoute
+  '/_authenticated/mes-biens': typeof AuthenticatedMesBiensRoute
   '/_authenticated/nouveau': typeof AuthenticatedNouveauRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/auth' | '/nouveau'
+  fullPaths: '/' | '/auth' | '/mes-biens' | '/nouveau'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/auth' | '/nouveau'
-  id: '__root__' | '/' | '/_authenticated' | '/auth' | '/_authenticated/nouveau'
+  to: '/' | '/auth' | '/mes-biens' | '/nouveau'
+  id:
+    | '__root__'
+    | '/'
+    | '/_authenticated'
+    | '/auth'
+    | '/_authenticated/mes-biens'
+    | '/_authenticated/nouveau'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -88,6 +103,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/mes-biens': {
+      id: '/_authenticated/mes-biens'
+      path: '/mes-biens'
+      fullPath: '/mes-biens'
+      preLoaderRoute: typeof AuthenticatedMesBiensRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/nouveau': {
       id: '/_authenticated/nouveau'
       path: '/nouveau'
@@ -99,10 +121,12 @@ declare module '@tanstack/react-router' {
 }
 
 interface AuthenticatedRouteRouteChildren {
+  AuthenticatedMesBiensRoute: typeof AuthenticatedMesBiensRoute
   AuthenticatedNouveauRoute: typeof AuthenticatedNouveauRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedMesBiensRoute: AuthenticatedMesBiensRoute,
   AuthenticatedNouveauRoute: AuthenticatedNouveauRoute,
 }
 
