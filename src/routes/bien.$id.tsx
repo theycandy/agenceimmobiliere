@@ -130,10 +130,13 @@ function AiAnalysis({
   analysis: Record<string, unknown> | null;
   condition: string;
 }) {
-  const style = typeof analysis?.style === "string" ? analysis.style : null;
-  const luminosity = typeof analysis?.luminosity === "string" ? analysis.luminosity : null;
-  const detected = Array.isArray(analysis?.detectedRooms)
-    ? (analysis.detectedRooms as unknown[]).filter((r): r is string => typeof r === "string")
+  const rawStyle = analysis?.["style"];
+  const rawLum = analysis?.["luminosity"];
+  const rawRooms = analysis?.["detectedRooms"];
+  const style = typeof rawStyle === "string" ? rawStyle : null;
+  const luminosity = typeof rawLum === "string" ? rawLum : null;
+  const detected = Array.isArray(rawRooms)
+    ? (rawRooms as unknown[]).filter((r): r is string => typeof r === "string")
     : [];
 
   return (
