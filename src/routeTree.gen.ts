@@ -14,6 +14,7 @@ import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AuthenticatedMesBiensRouteImport } from './routes/_authenticated/mes-biens'
 import { Route as AuthenticatedNouveauRouteImport } from './routes/_authenticated/nouveau'
+import { Route as BienIdRouteImport } from './routes/bien.$id'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -39,18 +40,25 @@ const AuthenticatedNouveauRoute = AuthenticatedNouveauRouteImport.update({
   path: '/nouveau',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const BienIdRoute = BienIdRouteImport.update({
+  id: '/bien/$id',
+  path: '/bien/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/mes-biens': typeof AuthenticatedMesBiensRoute
   '/nouveau': typeof AuthenticatedNouveauRoute
+  '/bien/$id': typeof BienIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/mes-biens': typeof AuthenticatedMesBiensRoute
   '/nouveau': typeof AuthenticatedNouveauRoute
+  '/bien/$id': typeof BienIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -59,12 +67,13 @@ export interface FileRoutesById {
   '/auth': typeof AuthRoute
   '/_authenticated/mes-biens': typeof AuthenticatedMesBiensRoute
   '/_authenticated/nouveau': typeof AuthenticatedNouveauRoute
+  '/bien/$id': typeof BienIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/auth' | '/mes-biens' | '/nouveau'
+  fullPaths: '/' | '/auth' | '/mes-biens' | '/nouveau' | '/bien/$id'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/auth' | '/mes-biens' | '/nouveau'
+  to: '/' | '/auth' | '/mes-biens' | '/nouveau' | '/bien/$id'
   id:
     | '__root__'
     | '/'
@@ -72,12 +81,14 @@ export interface FileRouteTypes {
     | '/auth'
     | '/_authenticated/mes-biens'
     | '/_authenticated/nouveau'
+    | '/bien/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   AuthRoute: typeof AuthRoute
+  BienIdRoute: typeof BienIdRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -117,6 +128,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedNouveauRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/bien/$id': {
+      id: '/bien/$id'
+      path: '/bien/$id'
+      fullPath: '/bien/$id'
+      preLoaderRoute: typeof BienIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -137,6 +155,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   AuthRoute: AuthRoute,
+  BienIdRoute: BienIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
